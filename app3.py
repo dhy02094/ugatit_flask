@@ -2,27 +2,25 @@ import io
 import json
 import os
 from flask.templating import render_template
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, send_file
 import numpy as np
 #from flask_ngrok import run_with_ngrok
 import transform
 import base64
 from flask_ngrok import run_with_ngrok
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 #run_with_ngrok(app)
 
 
-@app.route('/upload')
-def upload_file():
-    return render_template('upload.html')
-
 # 이미지 직접출력 
-@app.route('/uploader', methods=['GET','POST'])
-def uploader_file():
+@app.route('/predict', methods=['POST'])
+def predict():
     if request.method=='POST':
         f=request.files['file']
+        print(f)
         filename = f.filename
-        f.save(str(filename))
+        f.save(str(filename)+secure_filename(filename))
         f_path = str(filename)
         print(f_path)
         result = transform.selfie2anime(f_path)
@@ -33,19 +31,7 @@ def uploader_file():
         result_dict = json.dumps(result_dict)
 
 
-        return render_template('test.html', filename=f_path)
-
-
-
-# @app.route('/predict', method=['POST'])
-# def predict():
-#     if request.method == 'POST':
-#         # 이미지 바이트 데이터 받아오기
-#         file = request.files['file']
-#         result = transform.selfie2anime(file)
-#         print(result)
-#         return result
-
+        return jsonify({'result':'success'})
 
 if __name__ == "__main__":
     app.run(debug=True)
