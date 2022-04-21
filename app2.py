@@ -7,7 +7,7 @@ import numpy as np
 #from flask_ngrok import run_with_ngrok
 import transform
 import base64
-from flask_ngrok import run_with_ngrok
+#from flask_ngrok import run_with_ngrok
 app = Flask(__name__)
 #run_with_ngrok(app)
 
@@ -34,6 +34,7 @@ def uploader_file():
 
 
         return render_template('test.html', filename=f_path)
+        #return jsonify(result_dict)
 
 
 

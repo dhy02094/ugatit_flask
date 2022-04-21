@@ -7,7 +7,7 @@ import numpy as np
 #from flask_ngrok import run_with_ngrok
 import transform
 import base64
-from flask_ngrok import run_with_ngrok
+#from flask_ngrok import run_with_ngrok
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 #run_with_ngrok(app)
@@ -20,7 +20,7 @@ def predict():
         f=request.files['file']
         print(f)
         filename = f.filename
-        f.save(str(filename)+secure_filename(filename))
+        f.save(str(filename))
         f_path = str(filename)
         print(f_path)
         result = transform.selfie2anime(f_path)
@@ -31,7 +31,8 @@ def predict():
         result_dict = json.dumps(result_dict)
 
 
-        return jsonify({'result':'success'})
+        return 'success'
+        #return jsonify(result_dict)
 
 if __name__ == "__main__":
     app.run(debug=True)
